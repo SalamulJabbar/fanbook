@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+
+  <title>Fan book page</title>
+  <style>
+    .pik {
+      width: 100%;
+      height: 300px;
+      background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("http://wallpapercave.com/wp/wp1886089.jpg");
+      background-position: center;
+      background-size: cover;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .post {
+      width: 95%;
+      max-width: 500px;
+      margin: 20px auto 20px auto;
+      padding: 20px;
+      box-shadow: 0px 0px 3px 0px black;
+    }
+
+    .post>button {
+      margin-top: 15px;
+    }
+
+    .cards {
+      width: 95%;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    .cards>.card {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+
+
+
+  <script>
+    $(document).ready(function () {
+      show_fan();
+    });
+
+    function show_fan() {
+  let temp_html = ''; // Inisialisasi temp_html di sini
+  $.ajax({
+    type: "GET",
+    url: "/homework",
+    data: {},
+    success: function (response) {
+      let rows = response['messages']
+      for (let i = 0; i < rows.length; i++) {
+        let name = rows[i]['name']
+        let comment = rows[i]['comment']
+
+        // Menambahkan data ke temp_html
+        temp_html += `<div class="cards" id="card-list">
+    <div class="card">
+      <div class="card-body">
+        <blockquote class="blockquote mb-0">
+          <p>${name}</p>
+          <footer class="blockquote-footer">${comment}<i
+              class="bi bi-emoji-laughing-fill"></i> <cite title="Source Title"></cite></footer>
+        </blockquote>
+      </div>
+    </div>
+
+  </div>`;
+      }
+      // Mengisi elemen dengan data yang sudah diperoleh
+      $('#card-list').html(temp_html);
+    }
+  });
+}
+
+
+
+    function save_fan() {
+      let name = $("#floatingInput").val();
+      let comment = $("#floatingTextarea").val();
+      $.ajax({
+        type: "POST",
+        url: "/homework",
+        data: {
+          name_give: name,
+          comment_give: comment
+        },
+        success: function (response) {
+          alert(response["messages"])
+          window.location.reload()
+        }
+      });
+    }
+
+
+    // function save_fan() {
+    //   let fanmessages = $('#fanbook').val()
+    //   $.ajax({
+    //     type: "POST",
+    //     url: "/homework",
+    //     data: {
+    //       name_give: name,
+    //       comment_give: comment
+    //     },
+    //     success: function (response) {
+    //       alert(response["messages"])
+    //       window.location.reload()
+    //     }
+    //   });
+    // }
+
+  </script>
+</head>
+
+<body>
+  <div class="pik">
+    <h1>Upin Ipin Fan Book</h1>
+  </div>
+  <div class="post">
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="floatingInput" placeholder="Masukkan Nama" />
+      <label for="floatingInput">Masukkan Nama</label>
+    </div>
+    <div class="form-floating">
+      <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+      <label for="floatingTextarea">Pesan Fans</label>
+    </div>
+    <button id="fanbook" type="button" class="btn btn-dark" onclick="save_fan()">Kirim</button>
+  </div>
+  <div class="cards" id="card-list">
+    <div class="card">
+      <div class="card-body">
+        <blockquote class="blockquote mb-0">
+          <p>Upin.</p>
+          <footer class="blockquote-footer">si botak dengan rambut yang hanya 1 <i
+              class="bi bi-emoji-laughing-fill"></i> <cite title="Source Title"></cite></footer>
+        </blockquote>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>
